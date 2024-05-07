@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://nbm5qa0cm6nl"]
+
+[ext_resource type="Script" path="res://the main.gd" id="1_bts7m"]
+[ext_resource type="Texture2D" uid="uid://x63nqohkrlk6" path="res://icon.svg" id="2_i828x"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rp4v5"]
+size = Vector2(130, 131)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4trux"]
+size = Vector2(1457, 514.724)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_k0h4u"]
+
+[node name="maincharacter" type="CharacterBody2D" node_paths=PackedStringArray("nav_agent")]
+collision_mask = 7
+script = ExtResource("1_bts7m")
+nav_agent = NodePath("Node2D/NavigationAgent2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_i828x")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2, -1.5)
+shape = SubResource("RectangleShape2D_rp4v5")
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="recalculate the distance" type="Timer" parent="Node2D"]
+wait_time = 0.5
+autostart = true
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="Node2D"]
+debug_enabled = true
+
+[node name="aggro" type="Node2D" parent="."]
+
+[node name="aggroo range" type="Area2D" parent="aggro"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="aggro/aggroo range"]
+position = Vector2(9.99991, -1)
+rotation = -3.14159
+scale = Vector2(57.0462, -94.1674)
+shape = SubResource("RectangleShape2D_4trux")
+debug_color = Color(0, 0.6, 0.701961, 0.419608)
+
+[node name="deaggroo range" type="Area2D" parent="aggro"]
+scale = Vector2(17.4096, -14.2264)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="aggro/deaggroo range"]
+scale = Vector2(5744.73, 43651.3)
+shape = SubResource("CircleShape2D_k0h4u")
+debug_color = Color(1, 1, 1, 0.419608)
+
+[connection signal="timeout" from="Node2D/recalculate the distance" to="." method="_on_recalculate_the_distance_timeout"]
+[connection signal="area_entered" from="aggro/aggroo range" to="." method="_on_aggroo_range_area_entered"]
+[connection signal="area_exited" from="aggro/deaggroo range" to="." method="_on_deaggroo_range_area_exited"]
